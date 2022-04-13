@@ -145,15 +145,14 @@ class AgentController extends Controller
             $to_data = $request->get('toDate');
             $agent_id = $request->get('agent_id');
 
-            $filterdata = AdminBalenceTransferToAgent::whereDate('created_at', '>=', $from_data)->whereDate('created_at', '<=', $to_data);
+            $filterdata = AdminBalenceTransferToAgent::whereDate('created_at', '>=', $from_data)->whereDate('created_at', '<=', $to_data)->with('agent');
             if(isset($request->agent_id))
             {  
-                $filterdata = AdminBalenceTransferToAgent::where('agent_id' ,$agent_id)->whereDate('created_at', '>=', $from_data)->whereDate('created_at', '<=', $to_data);    
+                $filterdata = AdminBalenceTransferToAgent::where('agent_id' ,$agent_id)->whereDate('created_at', '>=', $from_data)->whereDate('created_at', '<=', $to_data)->with('agent');    
             }
 
             $datatable = new FilterPaymentReceiptDatatableScope($filterdata);            
         }
-        
         if (request()->ajax()) {
             return $datatable->query();
         }
@@ -178,12 +177,14 @@ class AgentController extends Controller
         $amount = $request->get('amount');
         //get opening balence
         $agent = Agent::where('id' ,$agent_id)->first();
-        // $opn_bal = $agent->opening_balance;
         
         if($request->type  == 'debit')
-        {            
+        {   
+            //create  persist       
             $storepaymentreceipt = AdminBalenceTransferToAgent::create($request->persist());
+
             $opening_balance = $agent->opening_balance+$amount;
+
             Agent::whereId($agent_id)->update(['opening_balance' =>$opening_balance]);
 
         }
@@ -191,10 +192,9 @@ class AgentController extends Controller
         {
            if($amount > $agent->opening_balance)
             {   
-                 // https://github.com/mustafaDev09/instantrashi.git
+                
                  session()->flash('lowbalence', 'Balence is Not Enough To Payment!');
                  return redirect()->back()->withInput($request->only('agent_id', 'type','amount','remark'));
-                
             }
 
             $storepaymentreceipt = AdminBalenceTransferToAgent::create($request->persist());

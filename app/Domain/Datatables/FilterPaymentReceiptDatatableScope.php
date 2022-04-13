@@ -19,15 +19,15 @@ class FilterPaymentReceiptDatatableScope extends BaseDatatableWithoutActionScope
         $this->data = $data;
         $this->setHtml([
             [
-                'data' => 'agent_login_id',
-                'name' => 'agent_login_id',
+                'data' => 'agent.agent_login_id',
+                'name' => 'agent.agent_login_id',
                 'title' => 'login_id',
                 'searchable' => true,
                 'orderable' => true,
             ],
             [
-                'data' => 'agent_name',
-                'name' => 'agent_name',
+                'data' => 'agent.agent_name',
+                'name' => 'agent.agent_name',
                 'title' => 'Name',
                 'searchable' => true,
                 'orderable' => true,

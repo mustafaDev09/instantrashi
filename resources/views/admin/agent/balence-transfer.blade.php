@@ -20,7 +20,7 @@
                  <option value="" class="bg-light">All</option>
                  @foreach($agents as $index => $agent)
                     <option class="bg-light" value="{{$agent->id}}" {{(collect(old('agent_id'))->contains($agent->id)) ? 'selected':'' }}>{{$agent->agent_login_id}}({{$agent->opening_balance}})</option>
-                  @endforeach
+                 @endforeach
                 </select>
                  <p class="h5 ">From Date :-</p>
                  <input class="form-control col-md-2 ml-2" type="date"  name="form-date" id="from-date" value="" onkeydown="return false" />

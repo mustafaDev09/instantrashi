@@ -17,15 +17,15 @@ class PaymentReceiptDatatableScope extends BaseDatatableWithoutActionScope
     {
         $this->setHtml([
             [
-                'data' => 'agent_login_id',
-                'name' => 'agent_login_id',
+                'data' => 'agent.agent_login_id',
+                'name' => 'agent.agent_login_id',
                 'title' => 'login_id',
                 'searchable' => true,
                 'orderable' => true,
             ],
             [
-                'data' => 'agent_name',
-                'name' => 'agent_name',
+                'data' => 'agent.agent_name',
+                'name' => 'agent.agent_name',
                 'title' => 'Name',
                 'searchable' => true,
                 'orderable' => true,
@@ -67,14 +67,11 @@ class PaymentReceiptDatatableScope extends BaseDatatableWithoutActionScope
     public function query()
     {
         
-        $query = AdminBalenceTransferToAgent::query()->whereDate('created_at', Carbon::today());
+        $query = AdminBalenceTransferToAgent::whereDate('created_at', Carbon::today())->with('agent');
          
         //  $query = AdminBalenceTransferToAgent::with('agent');
          
          return datatables()->eloquent($query)
-         ->editColumn('agent_login_id', function ($model) {
-            return $model->agent->agent_login_id;
-          }) 
           ->editColumn('agent_name', function ($model) {
             return $model->agent->agent_name;
           }) 
