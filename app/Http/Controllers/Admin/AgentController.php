@@ -153,6 +153,7 @@ class AgentController extends Controller
 
             $datatable = new FilterPaymentReceiptDatatableScope($filterdata);            
         }
+        
         if (request()->ajax()) {
             return $datatable->query();
         }
